@@ -402,6 +402,15 @@ function handleGetClaimByCode(req, res, code) {
     redeemable: claim.status === 'approved'
   });
 }
+
+function handleAdminExport(req, res) {
+  const db = getDB();
+  res.writeHead(200, {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Content-Disposition': 'attachment; filename="mister-coque-export-' + Date.now() + '.json"'
+  });
+  res.end(JSON.stringify(db, null, 2));
+}
 // ---------- Fichiers statiques ----------
 function serveStatic(req, res, urlPath) {
   let p = urlPath;
@@ -435,6 +444,7 @@ const server = http.createServer(async (req, res) => {
     if (p === '/api/admin/participants' && method === 'GET') return await guardAdmin(req, res, () => handleAdminParticipants(req, res));
     if (p === '/api/admin/stocks' && method === 'GET') return await guardAdmin(req, res, () => handleAdminStocks(req, res));
     if (p === '/api/admin/audit' && method === 'GET') return await guardAdmin(req, res, () => handleAdminAudit(req, res));
+    if (p === '/api/admin/export' && method === 'GET') return await guardAdmin(req, res, () => handleAdminExport(req, res));
     if (p === '/api/admin/prize-claims' && method === 'GET') return await guardAdmin(req, res, () => handleAdminClaims(req, res, url.searchParams));
     const act = /^\/api\/admin\/prize-claims\/([^/]+)\/(approve|reject)$/.exec(p);
     if (act && method === 'PATCH') return await guardAdmin(req, res, () => handleClaimAction(req, res, act[1], act[2]));

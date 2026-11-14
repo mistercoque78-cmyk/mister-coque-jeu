@@ -19,6 +19,7 @@ function init() {
   document.getElementById('login-btn').addEventListener('click', login);
   document.getElementById('password').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
   document.getElementById('logout-btn').addEventListener('click', logout);
+  document.getElementById('export-btn').addEventListener('click', exportData);
 
   document.querySelectorAll('.admin-tabs button').forEach(btn => {
     btn.addEventListener('click', () => switchTab(btn.dataset.tab));
@@ -53,6 +54,25 @@ function logout() {
   localStorage.removeItem(AUTH_KEY);
   token = '';
   location.reload();
+}
+
+async function exportData() {
+  try {
+    const res = await fetch('/api/admin/export', { headers: { 'Authorization': 'Bearer ' + token } });
+    if (res.status === 401) { alert('Session expirée. Reconnectez-vous.'); logout(); return; }
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'mister-coque-export-' + new Date().toISOString().slice(0, 10) + '.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    alert("Erreur lors de l'export : " + e.message);
+  }
 }
 
 function switchTab(tab) {

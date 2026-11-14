@@ -53,6 +53,7 @@ Variables d'environnement optionnelles :
 - `DELETE /api/admin/prize-claims/:id`
 - `GET /api/admin/stocks`
 - `GET /api/admin/audit`
+- `GET /api/admin/export` (sauvegarde complète des données, fichier JSON)
 - `GET /api/claims/:code` (vérification du code de retrait)
 
 ## 📁 Structure
@@ -115,6 +116,17 @@ cp .env.example .env           # renseigner ADMIN_PASSWORD + ADMIN_SECRET
 docker compose up -d --build
 ```
 Redémarrage automatique (`restart: unless-stopped`), données conservées dans le volume `jeu_data`.
+
+### Option D — Render (gratuit, sans carte, déploiement automatique) ✅
+1. Le fichier `render.yaml` est déjà fourni à la racine.
+2. Sur [Render](https://render.com) : **New → Blueprint** → connecte le dépôt GitHub → **Apply**.
+3. Choisis le plan **Free** (service `mister-coque-jeu`).
+4. `ADMIN_PASSWORD` et `ADMIN_SECRET` sont générés automatiquement (lisibles dans l'onglet **Environment**).
+5. URL fournie : `https://mister-coque-jeu.onrender.com` (HTTPS inclus).
+
+> ⚠️ Le tier gratuit Render n'a **pas de disque persistant** : `data/db.json` survit à la
+> mise en veille mais est **effacé à chaque redéploiement**. Avant toute mise à jour du code,
+> clique sur **💾 Exporter** dans l'espace admin pour télécharger une sauvegarde complète.
 
 ### Rappels sécurité
 - Définis **`ADMIN_PASSWORD`** et **`ADMIN_SECRET`** (jamais les valeurs par défaut).
