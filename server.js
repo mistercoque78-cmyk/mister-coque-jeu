@@ -115,8 +115,48 @@ function validateAnswers(answers) {
   return { answers: out };
 }
 // ---------- Tirage + réservation de stock (côté serveur uniquement) ----------
-function drawAndReserve(db) {
-  const available = db.stocks.filter(s => s.remaining > 0);
+// Gros lots garantis dans les 20 premiers participants (numéro participant → ordre du lot).
+// Billet 100€ = order 10 ; Billet 20€ = order 11 ; Montre Boss = order 12.
+const GROS_LOT_PLAN = [
+  { num: 2,  order: 10 }, // Billet de 100€
+  { num: 5,  order: 12 }, // Montre Boss homme
+  { num: 8,  order: 11 }, // Billet de 20€
+  { num: 11, order: 11 },
+  { num: 14, order: 11 },
+  { num: 17, order: 11 },
+  { num: 20, order: 11 }
+];
+
+function reserveStock(db, stock) {
+  stock.remaining -= 1;
+  stock.reserved += 1;
+  const def = LOT_PYRAMID.find(l => l.order === stock.order);
+  return {
+    source: 'pyramid',
+    prizeName: stock.name,
+    prizeOrder: stock.order,
+    quantity: 1,
+    stockId: stock.id,
+    stockReserved: true,
+    detail: def ? def.detail : ''
+  };
+}
+
+function drawAndReserve(db, participantNum) {
+  // 1) Gros lot planifié : garanti dans les 20 premiers participants.
+  const plan = GROS_LOT_PLAN.find(p => p.num === participantNum);
+  if (plan) {
+    const stock = db.stocks.find(s => s.order === plan.order && s.remaining > 0);
+    if (stock) return reserveStock(db, stock);
+  }
+
+  // 2) Tirage aléatoire pondéré par le stock restant.
+  //    Pendant les 20 premiers tirages, on écarte les gros lots (réservés au plan).
+  let available = db.stocks.filter(s => s.remaining > 0);
+  if (participantNum <= 20) {
+    const bigOrders = new Set(GROS_LOT_PLAN.map(p => p.order));
+    available = available.filter(s => !bigOrders.has(s.order));
+  }
   const total = available.reduce((sum, s) => sum + s.remaining, 0);
 
   if (total > 0) {
@@ -126,20 +166,10 @@ function drawAndReserve(db) {
       if (ticket < s.remaining) { chosen = s; break; }
       ticket -= s.remaining;
     }
-    chosen.remaining -= 1;
-    chosen.reserved += 1;
-    const def = LOT_PYRAMID.find(l => l.order === chosen.order);
-    return {
-      source: 'pyramid',
-      prizeName: chosen.name,
-      prizeOrder: chosen.order,
-      quantity: 1,
-      stockId: chosen.id,
-      stockReserved: true,
-      detail: def ? def.detail : ''
-    };
+    return reserveStock(db, chosen);
   }
 
+  // 3) Lots de secours : toute la pyramide est épuisée.
   const fb = LOT_FALLBACK[Math.floor(Math.random() * LOT_FALLBACK.length)];
   return {
     source: 'fallback',
@@ -188,7 +218,7 @@ async function handleParticipate(req, res) {
   }
 
   // 2) Tirage + réservation (transaction en mémoire, écrite atomiquement)
-  const draw = drawAndReserve(db);
+  const draw = drawAndReserve(db, db.counters.participant + 1);
 
   db.counters.participant += 1;
   const num = db.counters.participant;
@@ -415,6 +445,11 @@ function handleAdminExport(req, res) {
 function serveStatic(req, res, urlPath) {
   let p = urlPath;
   if (p === '/') p = '/index.html';
+  // Ne jamais exposer les données (RGPD) ni le code serveur.
+  if (p.startsWith('/data/') || p.startsWith('/server/') || p === '/server.js' || p.startsWith('/.')) {
+    res.writeHead(404);
+    return res.end('Not found');
+  }
   const filePath = path.normalize(path.join(ROOT, p));
   if (!filePath.startsWith(ROOT)) {
     res.writeHead(403);

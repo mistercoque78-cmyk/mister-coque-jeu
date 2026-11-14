@@ -26,8 +26,10 @@ Variables d'environnement optionnelles :
 > `index.html` directement en `file://`).
 
 ## ⚙️ Fonctionnement
-- **Pyramide de gains** : 29 lots / 106 unités (`assets/lots.js`).
-- **Tirage côté serveur** : pondéré par le stock restant, avec réservation.
+- **Pyramide de gains** : 25 lots / 97 unités (`assets/lots.js`).
+- **Tirage côté serveur** : pondéré par le stock restant, avec réservation. Les **gros lots**
+  (100 €, 5 × 20 €, montre Boss) sont **garantis dans les 20 premiers participants** via
+  `GROS_LOT_PLAN` (dans `server.js`).
 - **Lots de secours** (`LOT_FALLBACK`) : tirés uniquement quand la pyramide est épuisée.
 - **QCM** (`assets/questions.js`) : la **dernière question** est en choix unique (radio).
 - **Consentements** : Règles + RGPD **obligatoires** (non pré-cochés), Marketing +
