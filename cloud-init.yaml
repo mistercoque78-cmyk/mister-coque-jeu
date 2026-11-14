@@ -11,5 +11,5 @@ runcmd:
   - apt-get update -y
   - apt-get install -y curl git ca-certificates
   - rm -rf /opt/mister-coque-jeu
-  - git clone https://github.com/VOTRE_COMPTE/mister-coque-jeu.git /opt/mister-coque-jeu
+  - git clone https://github.com/mistercoque78-cmyk/mister-coque-jeu.git /opt/mister-coque-jeu
   - cd /opt/mister-coque-jeu && bash install.sh
