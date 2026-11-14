@@ -115,17 +115,6 @@ function validateAnswers(answers) {
   return { answers: out };
 }
 // ---------- Tirage + réservation de stock (côté serveur uniquement) ----------
-// Gros lots mis en avant : garantis dans les 20 premiers participants
-// (numéro participant → ordre du lot). Billet 100€ = order 11 ; Billet 20€ = order 12.
-const GROS_LOT_PLAN = [
-  { num: 2,  order: 11 }, // Billet de 100€
-  { num: 5,  order: 12 }, // Billet de 20€
-  { num: 8,  order: 12 },
-  { num: 11, order: 12 },
-  { num: 14, order: 12 },
-  { num: 17, order: 12 }
-];
-
 function reserveStock(db, stock) {
   stock.remaining -= 1;
   stock.reserved += 1;
@@ -141,21 +130,9 @@ function reserveStock(db, stock) {
   };
 }
 
-function drawAndReserve(db, participantNum) {
-  // 1) Gros lot planifié : garanti dans les 20 premiers participants.
-  const plan = GROS_LOT_PLAN.find(p => p.num === participantNum);
-  if (plan) {
-    const stock = db.stocks.find(s => s.order === plan.order && s.remaining > 0);
-    if (stock) return reserveStock(db, stock);
-  }
-
-  // 2) Tirage aléatoire pondéré par le stock restant.
-  //    Pendant les 20 premiers tirages, on écarte les gros lots (réservés au plan).
-  let available = db.stocks.filter(s => s.remaining > 0);
-  if (participantNum <= 20) {
-    const bigOrders = new Set(GROS_LOT_PLAN.map(p => p.order));
-    available = available.filter(s => !bigOrders.has(s.order));
-  }
+function drawAndReserve(db) {
+  // Tirage aléatoire pondéré par le stock restant.
+  const available = db.stocks.filter(s => s.remaining > 0);
   const total = available.reduce((sum, s) => sum + s.remaining, 0);
 
   if (total > 0) {
@@ -168,7 +145,7 @@ function drawAndReserve(db, participantNum) {
     return reserveStock(db, chosen);
   }
 
-  // 3) Lots de secours : toute la pyramide est épuisée.
+  // Lots de secours : toute la pyramide est épuisée.
   const fb = LOT_FALLBACK[Math.floor(Math.random() * LOT_FALLBACK.length)];
   return {
     source: 'fallback',
@@ -217,7 +194,7 @@ async function handleParticipate(req, res) {
   }
 
   // 2) Tirage + réservation (transaction en mémoire, écrite atomiquement)
-  const draw = drawAndReserve(db, db.counters.participant + 1);
+  const draw = drawAndReserve(db);
 
   db.counters.participant += 1;
   const num = db.counters.participant;

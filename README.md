@@ -26,10 +26,8 @@ Variables d'environnement optionnelles :
 > `index.html` directement en `file://`).
 
 ## ⚙️ Fonctionnement
-- **Pyramide de gains** : 28 lots / 105 unités (`assets/lots.js`).
-- **Tirage côté serveur** : pondéré par le stock restant, avec réservation. Les **gros lots**
-  (100 € + 5 × 20 €) sont **garantis dans les 20 premiers participants** via
-  `GROS_LOT_PLAN` (dans `server.js`).
+- **Pyramide de gains** : 26 lots / 99 unités (`assets/lots.js`).
+- **Tirage côté serveur** : pondéré par le stock restant, avec réservation.
 - **Connexion automatique (admin)** : case « Connexion automatique » sur l'écran de connexion
   (cochée par défaut) — le mot de passe est mémorisé localement et reconnecte l'admin
   automatiquement à l'ouverture de la page.
