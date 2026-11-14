@@ -115,16 +115,15 @@ function validateAnswers(answers) {
   return { answers: out };
 }
 // ---------- Tirage + réservation de stock (côté serveur uniquement) ----------
-// Gros lots garantis dans les 20 premiers participants (numéro participant → ordre du lot).
-// Billet 100€ = order 10 ; Billet 20€ = order 11 ; Montre Boss = order 12.
+// Gros lots mis en avant : garantis dans les 20 premiers participants
+// (numéro participant → ordre du lot). Billet 100€ = order 11 ; Billet 20€ = order 12.
 const GROS_LOT_PLAN = [
-  { num: 2,  order: 10 }, // Billet de 100€
-  { num: 5,  order: 12 }, // Montre Boss homme
-  { num: 8,  order: 11 }, // Billet de 20€
-  { num: 11, order: 11 },
-  { num: 14, order: 11 },
-  { num: 17, order: 11 },
-  { num: 20, order: 11 }
+  { num: 2,  order: 11 }, // Billet de 100€
+  { num: 5,  order: 12 }, // Billet de 20€
+  { num: 8,  order: 12 },
+  { num: 11, order: 12 },
+  { num: 14, order: 12 },
+  { num: 17, order: 12 }
 ];
 
 function reserveStock(db, stock) {

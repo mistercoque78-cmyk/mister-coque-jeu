@@ -7,6 +7,7 @@ import {
 } from './api.js';
 
 const AUTH_KEY = 'mister_coque_admin_token';
+const PWD_KEY = 'mister_coque_admin_pwd';
 let token = localStorage.getItem(AUTH_KEY) || '';
 let claimFilter = 'pending';
 let claimSearch = '';
@@ -33,25 +34,38 @@ function init() {
   });
 
   if (authed) refreshAll();
+  else {
+    // Connexion automatique : mot de passe mémorisé → reconnexion sans saisie.
+    const savedPwd = localStorage.getItem(PWD_KEY);
+    if (savedPwd) {
+      document.getElementById('password').value = savedPwd;
+      login();
+    }
+  }
 }
 
 async function login() {
   const pw = document.getElementById('password').value;
+  const remember = document.getElementById('remember').checked;
   try {
     const res = await adminLogin(pw);
     token = res.token;
     localStorage.setItem(AUTH_KEY, token);
+    if (remember) localStorage.setItem(PWD_KEY, pw);
+    else localStorage.removeItem(PWD_KEY);
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('admin-panel').classList.remove('hidden');
     document.getElementById('password').value = '';
     refreshAll();
   } catch (e) {
+    if (remember) localStorage.removeItem(PWD_KEY);
     alert('Mot de passe incorrect.');
   }
 }
 
 function logout() {
   localStorage.removeItem(AUTH_KEY);
+  localStorage.removeItem(PWD_KEY);
   token = '';
   location.reload();
 }

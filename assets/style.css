@@ -382,6 +382,26 @@ tr:last-child td { border-bottom: none; }
   text-align: center;
 }
 .login-screen input:focus { border-color: #ff4d6d; }
+.login-screen .remember {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #a0a0b0;
+  margin: 0 0 16px;
+  cursor: pointer;
+}
+.login-screen .remember input {
+  width: auto;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  text-align: left;
+  accent-color: #ff4d6d;
+}
 
 .hidden { display: none !important; }
 
