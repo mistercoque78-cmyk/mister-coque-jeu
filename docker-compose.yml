@@ -1,0 +1,21 @@
+# ============================================================
+# Jeu Instant Gagnant — production locale / VPS (Docker)
+#   docker compose up -d --build
+# Volume persistant : les données survivent aux redémarrages.
+# ============================================================
+services:
+  jeu:
+    build: .
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=8000
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - ADMIN_SECRET=${ADMIN_SECRET}
+    ports:
+      - "8000:8000"
+    volumes:
+      - jeu_data:/app/data
+
+volumes:
+  jeu_data:

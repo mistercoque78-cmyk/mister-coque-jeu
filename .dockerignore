@@ -1,0 +1,15 @@
+node_modules/
+data/
+.git/
+.gitignore
+*.log
+.env
+.env.local
+.env.example
+Dockerfile
+docker-compose.yml
+fly.toml
+Procfile
+start.bat
+start.sh
+README.md

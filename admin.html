@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Admin — Jeu Instant Gagnant</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="phone">
+
+  <div id="login-screen" class="login-screen">
+    <div class="emoji">🔒</div>
+    <h2>Espace Admin</h2>
+    <p>Jeu Instant Gagnant — Mister Coque × Arabian Seduct</p>
+    <input type="password" id="password" placeholder="Mot de passe" autocomplete="current-password">
+    <button class="btn" id="login-btn">Se connecter</button>
+  </div>
+
+  <div id="admin-panel" class="hidden">
+    <div class="admin-header">
+      <h2>🔒 Admin</h2>
+      <div class="right">
+        <span class="count"><span id="count">0</span> inscrits</span>
+        <button class="logout-btn" id="logout-btn">Déconnexion</button>
+      </div>
+    </div>
+
+    <div class="admin-tabs">
+      <button class="active" data-tab="participants">Participants</button>
+      <button data-tab="claims">Lots gagnés</button>
+      <button data-tab="stocks">Stocks</button>
+      <button data-tab="audit">Audit</button>
+    </div>
+
+    <div id="tab-participants" class="admin-content">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Prénom</th><th>Nom</th><th>Téléphone</th><th>Ville</th><th>Gain</th><th>Consentements</th><th>Date</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="notice">Consentements : Règles & RGPD obligatoires · Marketing & Partenaires facultatifs. Survolez la date pour voir l'IP et le navigateur (preuve).</div>
+    </div>
+
+    <div id="tab-claims" class="admin-content hidden">
+      <div class="actions">
+        <div class="filters" id="filter-claims">
+          <button class="filter-btn active" data-filter="pending">En attente</button>
+          <button class="filter-btn" data-filter="approved">Validés</button>
+          <button class="filter-btn" data-filter="rejected">Refusés</button>
+          <button class="filter-btn" data-filter="">Tous</button>
+        </div>
+        <input type="text" id="claim-search" class="text-input" placeholder="Rechercher code / participant / tél.">
+      </div>
+      <div id="claims-list"></div>
+    </div>
+
+    <div id="tab-stocks" class="admin-content hidden">
+      <div class="notice">Stock par lot. Quand toute la pyramide est épuisée, le tirage bascule automatiquement sur les remises de secours.</div>
+      <div id="stock-container"></div>
+    </div>
+
+    <div id="tab-audit" class="admin-content hidden">
+      <div class="notice">Historique des actions d'administration (validation, refus, suppression, participations).</div>
+      <div id="audit-list"></div>
+    </div>
+  </div>
+
+</div>
+<script type="module" src="assets/admin.js"></script>
+</body>
+</html>

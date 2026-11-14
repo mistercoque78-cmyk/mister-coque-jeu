@@ -1,0 +1,15 @@
+#cloud-config
+# ============================================================
+# Jeu Instant Gagnant - configuration automatique (Oracle Cloud)
+# A coller dans : Create instance -> Advanced options ->
+#   Management -> Cloud-init script -> "Paste cloud-init script"
+# ------------------------------------------------------------
+# [!] Remplace l'URL GitHub ci-dessous par la tienne.
+#     Le depot doit etre PUBLIC (aucun secret n'est dans le code).
+# ============================================================
+runcmd:
+  - apt-get update -y
+  - apt-get install -y curl git ca-certificates
+  - rm -rf /opt/mister-coque-jeu
+  - git clone https://github.com/VOTRE_COMPTE/mister-coque-jeu.git /opt/mister-coque-jeu
+  - cd /opt/mister-coque-jeu && bash install.sh

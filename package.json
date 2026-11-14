@@ -1,0 +1,10 @@
+{
+  "name": "mister-coque-jeu",
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Jeu Instant Gagnant — Mister Coque × Arabian Seduct (Node zéro dépendance)",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  }
+}

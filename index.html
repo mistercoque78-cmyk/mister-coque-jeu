@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Jeu Instant Gagnant — Mister Coque × Arabian Seduct</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="phone">
+
+  <div id="step-form">
+    <div class="header">
+      <div class="emoji">🎁</div>
+      <h1>Jeu Instant Gagnant</h1>
+      <p>Mister Coque × Arabian Seduct</p>
+      <div class="badge">+ DE 2000€ DE LOTS</div>
+    </div>
+
+    <div class="content">
+      <div class="row">
+        <div class="field">
+          <label for="firstname">Prénom <span class="req">*</span></label>
+          <input type="text" id="firstname" placeholder="Jean" autocomplete="given-name">
+        </div>
+        <div class="field">
+          <label for="lastname">Nom <span class="req">*</span></label>
+          <input type="text" id="lastname" placeholder="Dupont" autocomplete="family-name">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="phone">Téléphone <span class="req">*</span></label>
+        <input type="tel" id="phone" placeholder="06 12 34 56 78" autocomplete="tel">
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="city">Ville <span class="req">*</span></label>
+          <input type="text" id="city" placeholder="Trappes" autocomplete="address-level2">
+        </div>
+        <div class="field" style="max-width: 130px;">
+          <label for="zipcode">Code postal <span class="req">*</span></label>
+          <input type="text" id="zipcode" placeholder="78190" maxlength="5" inputmode="numeric" autocomplete="postal-code">
+        </div>
+      </div>
+
+      <div id="questions"></div>
+
+      <div class="consent-block">
+        <div class="checkbox">
+          <input type="checkbox" id="consent-rules">
+          <label for="consent-rules">J'accepte le <a href="#" id="rules-link">règlement du jeu-concours</a> <span class="req">*</span></label>
+        </div>
+        <div class="checkbox">
+          <input type="checkbox" id="consent-privacy">
+          <label for="consent-privacy">J'accepte le <a href="#" id="privacy-link">traitement de mes données</a> pour ce jeu <span class="req">*</span></label>
+        </div>
+        <div class="checkbox">
+          <input type="checkbox" id="consent-marketing">
+          <label for="consent-marketing">J'accepte d'être recontacté(e) pour des offres marketing</label>
+        </div>
+        <div class="checkbox">
+          <input type="checkbox" id="consent-partners">
+          <label for="consent-partners">J'accepte que mes données soient transmises aux partenaires</label>
+        </div>
+      </div>
+
+      <button class="btn" id="submit-btn" disabled>Tenter ma chance</button>
+    </div>
+  </div>
+
+  <div id="step-result" class="hidden">
+    <div class="header">
+      <div class="emoji" id="result-header-emoji">🎉</div>
+      <h1 id="result-header-title">Résultat</h1>
+    </div>
+    <div class="result-screen">
+      <div class="result-emoji" id="result-emoji">🎁</div>
+      <h2 id="result-title">Félicitations !</h2>
+      <p class="subtitle" id="result-subtitle">Vous avez gagné</p>
+
+      <div class="lot-card">
+        <div class="label">Votre gain</div>
+        <div class="lot-name" id="result-lot">—</div>
+        <div class="lot-detail" id="result-lot-detail"></div>
+      </div>
+
+      <div class="participant-num">N° <span id="confirm-num">—</span></div>
+
+      <div class="code-block">
+        <div class="label">Code de retrait</div>
+        <div class="code" id="result-code">—</div>
+        <p class="code-note">Présentez ce code en boutique. Il sera activé après validation de votre gain par l'équipe.</p>
+      </div>
+
+      <div class="info-block">
+        <strong>📞 Comment récupérer votre lot</strong>
+        <ul>
+          <li>Le gagnant sera recontacté au numéro renseigné dans les 7 jours.</li>
+          <li>Injoignable après 2 tentatives = lot perdu.</li>
+          <li>Récupération du lot en boutique dans un délai de 30 jours.</li>
+          <li>1 participation par personne et par numéro de téléphone.</li>
+        </ul>
+      </div>
+
+      <div class="info-block">
+        <strong>⚠️ Conditions importantes</strong>
+        <ul>
+          <li>Présentation obligatoire d'une pièce d'identité au retrait.</li>
+          <li>Lot non échangeable et non remboursable.</li>
+          <li>Le code de retrait n'est valable qu'une fois le gain validé par l'équipe.</li>
+        </ul>
+      </div>
+
+      <button class="btn secondary" id="retour-btn">← Retour</button>
+    </div>
+  </div>
+
+</div>
+<script type="module" src="assets/jeu.js"></script>
+</body>
+</html>
